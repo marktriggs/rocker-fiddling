@@ -1,0 +1,50 @@
+@import java.util.*
+@import net.dishevelled.*
+@import net.dishevelled.App.H
+
+@args (
+  String name,
+  Date now,
+  List<App.FileEntry> files,
+  String sort,
+)
+
+<!doctype html>
+<html>
+  <head>
+    <title>A test page for @name</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <p>Hello, @name.  The time is <pre>@now</pre>.</p>
+
+    <select name="sort">
+      @for (vl : Arrays.asList(new H.ValueLabel<>("sort_a", "Sort by A"),
+                               new H.ValueLabel<>("sort_b", "Sort by B"))) {
+      <option value="@vl.value()" @if (sort.equals(vl.value())) {selected}>@vl.label()</option>
+      }
+    </select>
+
+
+    @if (now.getHours() < 12) {
+    <p>It's before lunch</p>
+    } else {
+    <p>It's after lunch</p>
+    }
+
+    @raw(H.stuff())
+
+    <table>
+      <tr><th>Name</th><th>Size</th><th>Type</th></tr>
+      @for (entry : files) {
+      <tr>
+        <td>@entry.filename()</td>
+        <td>@entry.size()</td>
+        <td>@entry.mimeType()</td>
+      </tr>
+      }
+    </table>
+
+    @views.subtemplate.template(files)
+  </body>
+</html>
